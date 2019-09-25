@@ -1,5 +1,7 @@
 # Hamburger Menu Demo (React + Styled-components)
 
+![Hamburger menu](https://user-images.githubusercontent.com/78280/65647099-94ac6200-e00e-11e9-9732-ca29761eb2d5.gif)
+
 There are several components in this app - ```HamburgerButton```, ```MainMenu``` and ```SideMenu```. When user clicks on hamburger button, context state is being updated. This way other components will know menu is open. If user clicks again, context state changes back to ```false```.
 
 Hamburger button has two kinds of visual states: on hover and active. Both states were done manually, using CSS styling only. No SVGs or fonts.
