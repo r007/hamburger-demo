@@ -1,68 +1,63 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Hamburger Menu Demo (React + Styled-components)
 
-## Available Scripts
+There are several components in this app - ```HamburgerButton```, ```MainMenu``` and ```SideMenu```. When user clicks on hamburger button, context state is being updated. This way other components will know menu is open. If user clicks again, context state changes back to ```false```.
 
-In the project directory, you can run:
+Hamburger button has two kinds of visual states: on hover and active. Both states were done manually, using CSS styling only. No SVGs or fonts.
 
-### `npm start`
+```scss
+:hover {
+  span:nth-of-type(1) {
+    width: 33px;
+  }
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  span:nth-of-type(2) {
+    width: 40px;
+  }
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+  span:nth-of-type(3) {
+    width: 30px;
+  }
+}
 
-### `npm test`
+&.active {
+  span:nth-of-type(1) {
+    transform: rotate(45deg) translate(10px, 10px);
+    width: 40px;
+  }
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  span:nth-of-type(2) {
+    opacity: 0;
+    pointer-events: none;
+  }
 
-### `npm run build`
+  span:nth-of-type(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+    width: 40px;
+  }
+}  
+```
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+On hover the top and bottom bars are getting shorter. When button is active, two things are happening: rotation of top and bottom bars (45 degrees) + moving. At the same time the middle bar is fading.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+Also, menu tracks outside clicks. If menu is open and user clicked outside the ref, it will be closed. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```jsx
+import { useEffect } from 'react';
 
-### `npm run eject`
+const useOnClickOutside = (ref, handler) => {
+  useEffect(() => {
+    const listener = event => {
+      if (!ref.current || ref.current.contains(event.target)) {
+        return;
+      }
+      handler(event);
+    };
+    document.addEventListener('mousedown', listener);
+    return () => {
+      document.removeEventListener('mousedown', listener);
+    };
+  }, [ref, handler]);
+};
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+export default useOnClickOutside;
+```
