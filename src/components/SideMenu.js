@@ -21,7 +21,7 @@ const Menu = styled.nav`
   transform: translateX(-100%);
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 
-  ${props =>
+  ${(props) =>
     props.open &&
     css`
       transform: translateX(0);
